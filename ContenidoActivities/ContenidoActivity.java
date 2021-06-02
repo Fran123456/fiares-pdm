@@ -1,24 +1,18 @@
-package com.fiares.CarrerasActivities;
+package com.fiares.ContenidoActivities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fiares.Models.Carrera;
-import com.fiares.Models.CarreraApi;
+import com.fiares.Models.Contenido;
+import com.fiares.Models.ContenidoApi;
 import com.fiares.R;
 import com.fiares.Utility.Help;
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,35 +23,42 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CarreraActivity extends AppCompatActivity {
+public class ContenidoActivity extends AppCompatActivity {
+
+
     private RecyclerView recyclerView;
-    private RecyclerViewCarrera adapter;
-    public List<Carrera> menuList;
+    private RecyclerViewContenido adapter;
+    private List<Contenido> menuList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carrera);
+        setContentView(R.layout.activity_contenido);
+
+        setTitle("FIARES - CONTENIDO");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        menuList = new ArrayList<>();
-        getCarreras();
-        setTitle("FIARES - CARRERAS ");
+        String id = getIntent().getStringExtra("id");
+
+        getContenido(id);
     }
 
-    private void getCarreras(){
+
+
+    private void getContenido(String id){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Help.url()).addConverterFactory(GsonConverterFactory.create()).build();
-        CarreraApi carreraApi = retrofit.create(CarreraApi.class);
-        Call<List<Carrera>> call = carreraApi.carreras(Help.key());
-        List<Carrera> list = new ArrayList<>();
-        call.enqueue(new Callback<List<Carrera>>() {
+        ContenidoApi contenidoApi = retrofit.create( ContenidoApi.class);
+        Call<List< Contenido>> call =   contenidoApi.contenido( Integer.parseInt(id) ,Help.key());
+        List<Contenido> list = new ArrayList<>();
+        call.enqueue(new Callback<List<Contenido>>() {
             @Override
-            public void onResponse(Call<List<Carrera>> call, Response<List<Carrera>> response) {
+            public void onResponse(Call<List<Contenido>> call, Response<List<Contenido>> response) {
                 try{
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
                         recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter= new RecyclerViewCarrera(list);
+                        adapter= new RecyclerViewContenido(list);
                         recyclerView.setAdapter(adapter);
 
                         adapter.setOnClickListener(new View.OnClickListener(){
@@ -67,7 +68,7 @@ public class CarreraActivity extends AppCompatActivity {
 
                                 try{
                                     Class<?>
-                                            clase=Class.forName("com.fiares.MateriasActivities.MateriaActivity");
+                                            clase=Class.forName("com.fiares.ContenidoActivities.ContenidoActivity");
                                     Intent inte = new Intent(getApplicationContext(), clase);
                                     inte.putExtra("id", String.valueOf( menuList.get(recyclerView.getChildAdapterPosition(v)).getId() ) );
                                     //inte.putExtra("id",  "Hola" );
@@ -78,7 +79,7 @@ public class CarreraActivity extends AppCompatActivity {
 
                             }
                         });
-                      //  Toast.makeText(getApplicationContext(),list.size() , Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(getApplicationContext(),list.size() , Toast.LENGTH_LONG).show();
                     }
                 }catch(Exception ex){
                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -86,42 +87,11 @@ public class CarreraActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Carrera>> call, Throwable t) {
+            public void onFailure(Call<List<Contenido>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
-
-
-
-    public void cerrarSesion(View view){
-        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getApplicationContext(), "Hasta pronto", Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-
-
-
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.overflow, menu);
-        return true;
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        int id = item.getItemId();
-        if(id==R.id.menu_salir_menu){
-            this.cerrarSesion(item.getActionView());
-            // startActivity(new Intent(this , MainActivity.class));
-            // finish();
-            // Toast.makeText(this, "xxx", Toast.LENGTH_LONG).show();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -70,7 +70,7 @@ public class TemarioActivity extends AppCompatActivity {
 
                                 try{
                                     Class<?>
-                                            clase=Class.forName("com.fiares.UnidadesActivities.UnidadActivity");
+                                            clase=Class.forName("com.fiares.ContenidoActivities.ContenidoActivity");
                                     Intent inte = new Intent(getApplicationContext(), clase);
                                     inte.putExtra("id", String.valueOf( menuList.get(recyclerView.getChildAdapterPosition(v)).getId() ) );
                                     //inte.putExtra("id",  "Hola" );

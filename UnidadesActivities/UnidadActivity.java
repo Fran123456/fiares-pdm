@@ -58,7 +58,7 @@ public class UnidadActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleTemario);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewUnidad(list);
                         recyclerView.setAdapter(adapter);
