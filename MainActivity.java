@@ -15,16 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.fiares.Utility.Help;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         menuList = Help.getMenusHome();
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = (RecyclerView)findViewById(R.id.recycleMenu);
+        recyclerView = (RecyclerView)findViewById(R.id.recycleCarrera);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter= new RecyclerViewAdaptador(menuList);
         recyclerView.setAdapter(adapter);

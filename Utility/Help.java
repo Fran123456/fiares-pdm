@@ -1,5 +1,6 @@
 package com.fiares.Utility;
 
+import com.fiares.Models.Carrera;
 import com.fiares.R;
 
 import java.util.ArrayList;
@@ -16,5 +17,18 @@ public class Help {
         item.add(new Menu("SOBRE NOSOTROS","Información general de la aplicación", R.drawable.info,"CareerActivities.CareerMenuActivity"));
         return item;
     }
+
+
+    public static List<Carrera> getMenus(){
+        List<Carrera> item = new ArrayList<>();
+        item.add(new Carrera(1, "casa","x"));
+
+        return item;
+    }
+
+    public static String url(){
+        return "http://ccpcatalana.com/fiaresapi/public/";
+    }
+    public static String key(){return "EIGA7SBzsdho13g31052z9He0JiR-MAT115";}
 
 }
