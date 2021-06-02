@@ -1,4 +1,4 @@
-package com.fiares.MateriasActivities;
+package com.fiares.UnidadesActivities;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +8,16 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fiares.CarrerasActivities.RecyclerViewCarrera;
-import com.fiares.Models.Carrera;
+import com.fiares.MateriasActivities.RecyclerViewMateria;
 import com.fiares.Models.Materia;
+import com.fiares.Models.Unidad;
 import com.fiares.R;
 
 import java.util.List;
 
-public class RecyclerViewMateria extends RecyclerView.Adapter<RecyclerViewMateria.ViewHolder> implements View.OnClickListener{
+public class RecyclerViewUnidad extends RecyclerView.Adapter<RecyclerViewUnidad.ViewHolder> implements View.OnClickListener{
 
-    public List<Materia> menuList;
+    public List<Unidad> menuList;
     private View.OnClickListener listener;
     @Override
     public void onClick(View v) {
@@ -25,6 +25,7 @@ public class RecyclerViewMateria extends RecyclerView.Adapter<RecyclerViewMateri
             listener.onClick(v);
         }
     }
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView titulo;
@@ -39,23 +40,23 @@ public class RecyclerViewMateria extends RecyclerView.Adapter<RecyclerViewMateri
         }
     }
 
-    public RecyclerViewMateria(List<Materia> menuList){
+    public RecyclerViewUnidad(List<Unidad> menuList){
         this.menuList = menuList;
     }
 
     @Override
-    public RecyclerViewMateria.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewUnidad.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_, parent,false);
-        RecyclerViewMateria.ViewHolder viewHolder = new RecyclerViewMateria.ViewHolder(view);
+        RecyclerViewUnidad.ViewHolder viewHolder = new RecyclerViewUnidad.ViewHolder(view);
         view.setOnClickListener(this);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewMateria.ViewHolder holder, int position) {
-        holder.titulo.setText( menuList.get(position).getSiglas() );
-        holder.des.setText( menuList.get(position).getTitulo() );
-        holder.image.setImageResource( R.drawable.subject);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.titulo.setText( menuList.get(position).getTitulo() );
+        holder.des.setText( menuList.get(position).getDescripcion() );
+        holder.image.setImageResource( R.drawable.read);
     }
 
     public void setOnClickListener(View.OnClickListener listener){
@@ -66,5 +67,6 @@ public class RecyclerViewMateria extends RecyclerView.Adapter<RecyclerViewMateri
     public int getItemCount() {
         return menuList.size();
     }
+
 
 }

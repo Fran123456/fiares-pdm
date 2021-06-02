@@ -55,7 +55,7 @@ public class CarreraActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleMateria);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleUnidad);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewCarrera(list);
                         recyclerView.setAdapter(adapter);

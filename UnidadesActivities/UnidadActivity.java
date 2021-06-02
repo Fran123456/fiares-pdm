@@ -1,4 +1,4 @@
-package com.fiares.MateriasActivities;
+package com.fiares.UnidadesActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.fiares.CarrerasActivities.RecyclerViewCarrera;
+import com.fiares.MateriasActivities.RecyclerViewMateria;
+import com.fiares.Models.Carrera;
 import com.fiares.Models.Materia;
 import com.fiares.Models.MateriaApi;
+import com.fiares.Models.Unidad;
+import com.fiares.Models.UnidadApi;
 import com.fiares.R;
 import com.fiares.Utility.Help;
 import com.firebase.ui.auth.AuthUI;
@@ -29,38 +34,38 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MateriaActivity extends AppCompatActivity {
+public class UnidadActivity extends AppCompatActivity {
+
 
     private RecyclerView recyclerView;
-    private RecyclerViewMateria adapter;
-    public List<Materia> menuList;
+    private RecyclerViewUnidad adapter;
+    public List<Unidad> menuList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_materia);
+        setContentView(R.layout.activity_unidad);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String id = getIntent().getStringExtra("id");
-        setTitle("FIARES - MATERIAS ");
-        getMaterias(id);
+        setTitle("FIARES - UNIDADES ");
+        getUnidades(id);
     }
 
-
-
-    private void getMaterias(String id){
+    private void getUnidades(String id){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Help.url()).addConverterFactory(GsonConverterFactory.create()).build();
-        MateriaApi carreraApi = retrofit.create(MateriaApi.class);
-        Call<List<Materia>> call = carreraApi.materias( Integer.parseInt(id) ,Help.key());
-        List<Materia> list = new ArrayList<>();
-        call.enqueue(new Callback<List<Materia>>() {
+        UnidadApi unidadApi = retrofit.create(UnidadApi.class);
+        Call<List<Unidad>> call =   unidadApi.unidades( Integer.parseInt(id) ,Help.key());
+        List<Unidad> list = new ArrayList<>();
+        call.enqueue(new Callback<List<Unidad>>() {
             @Override
-            public void onResponse(Call<List<Materia>> call, Response<List<Materia>> response) {
+            public void onResponse(Call<List<Unidad>> call, Response<List<Unidad>> response) {
                 try{
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
                         recyclerView = (RecyclerView)findViewById(R.id.recycleUnidad);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter= new RecyclerViewMateria(list);
+                        adapter= new RecyclerViewUnidad(list);
                         recyclerView.setAdapter(adapter);
 
                         adapter.setOnClickListener(new View.OnClickListener(){
@@ -89,18 +94,12 @@ public class MateriaActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Materia>> call, Throwable t) {
+            public void onFailure(Call<List<Unidad>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
-
-
-
-
-
-
 
 
 
@@ -130,4 +129,6 @@ public class MateriaActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

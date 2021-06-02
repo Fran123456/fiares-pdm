@@ -1,10 +1,10 @@
 package com.fiares.Models;
 
-public class Unidades {
+public class Unidad {
     private int id, orden_u, materia_id;
     private String titulo, descripcion;
 
-    public Unidades(int id, int orden_u, int materia_id, String titulo, String descripcion) {
+    public Unidad(int id, int orden_u, int materia_id, String titulo, String descripcion) {
         this.id = id;
         this.orden_u = orden_u;
         this.materia_id = materia_id;
@@ -12,7 +12,7 @@ public class Unidades {
         this.descripcion = descripcion;
     }
 
-    public Unidades() {
+    public Unidad() {
     }
 
     public int getId() {
