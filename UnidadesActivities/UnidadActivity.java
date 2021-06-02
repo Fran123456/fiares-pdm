@@ -12,11 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fiares.CarrerasActivities.RecyclerViewCarrera;
-import com.fiares.MateriasActivities.RecyclerViewMateria;
-import com.fiares.Models.Carrera;
-import com.fiares.Models.Materia;
-import com.fiares.Models.MateriaApi;
 import com.fiares.Models.Unidad;
 import com.fiares.Models.UnidadApi;
 import com.fiares.R;
@@ -63,7 +58,7 @@ public class UnidadActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleUnidad);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleTemario);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewUnidad(list);
                         recyclerView.setAdapter(adapter);
@@ -75,7 +70,7 @@ public class UnidadActivity extends AppCompatActivity {
 
                                 try{
                                     Class<?>
-                                            clase=Class.forName("com.fiares.UnidadesActivities.UnidadActivity");
+                                            clase=Class.forName("com.fiares.TemarioActivities.TemarioActivity");
                                     Intent inte = new Intent(getApplicationContext(), clase);
                                     inte.putExtra("id", String.valueOf( menuList.get(recyclerView.getChildAdapterPosition(v)).getId() ) );
                                     //inte.putExtra("id",  "Hola" );

@@ -58,7 +58,7 @@ public class MateriaActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleUnidad);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleTemario);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewMateria(list);
                         recyclerView.setAdapter(adapter);
