@@ -1,4 +1,4 @@
-package com.fiares.CarrerasActivities;
+package com.fiares.MateriasActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fiares.Models.Carrera;
-import com.fiares.Models.CarreraApi;
+import com.fiares.Models.Materia;
+import com.fiares.Models.MateriaApi;
 import com.fiares.R;
 import com.fiares.Utility.Help;
 import com.firebase.ui.auth.AuthUI;
@@ -29,35 +29,38 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CarreraActivity extends AppCompatActivity {
+public class MateriaActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
-    private RecyclerViewCarrera adapter;
-    public List<Carrera> menuList;
+    private RecyclerViewMateria adapter;
+    public List<Materia> menuList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_carrera);
+        setContentView(R.layout.activity_materia);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        menuList = new ArrayList<>();
-        getCarreras();
-        setTitle("FIARES - CARRERAS ");
+        String id = getIntent().getStringExtra("id");
+        setTitle("FIARES - MATERIAS ");
+        getMaterias(id);
     }
 
-    private void getCarreras(){
+
+
+    private void getMaterias(String id){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Help.url()).addConverterFactory(GsonConverterFactory.create()).build();
-        CarreraApi carreraApi = retrofit.create(CarreraApi.class);
-        Call<List<Carrera>> call = carreraApi.carreras(Help.key());
-        List<Carrera> list = new ArrayList<>();
-        call.enqueue(new Callback<List<Carrera>>() {
+        MateriaApi carreraApi = retrofit.create(MateriaApi.class);
+        Call<List<Materia>> call = carreraApi.materias( Integer.parseInt(id) ,Help.key());
+        List<Materia> list = new ArrayList<>();
+        call.enqueue(new Callback<List<Materia>>() {
             @Override
-            public void onResponse(Call<List<Carrera>> call, Response<List<Carrera>> response) {
+            public void onResponse(Call<List<Materia>> call, Response<List<Materia>> response) {
                 try{
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
                         recyclerView = (RecyclerView)findViewById(R.id.recycleMateria);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        adapter= new RecyclerViewCarrera(list);
+                        adapter= new RecyclerViewMateria(list);
                         recyclerView.setAdapter(adapter);
 
                         adapter.setOnClickListener(new View.OnClickListener(){
@@ -78,7 +81,7 @@ public class CarreraActivity extends AppCompatActivity {
 
                             }
                         });
-                      //  Toast.makeText(getApplicationContext(),list.size() , Toast.LENGTH_LONG).show();
+                        //  Toast.makeText(getApplicationContext(),list.size() , Toast.LENGTH_LONG).show();
                     }
                 }catch(Exception ex){
                     Toast.makeText(getApplicationContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -86,12 +89,18 @@ public class CarreraActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Carrera>> call, Throwable t) {
+            public void onFailure(Call<List<Materia>> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
+
+
+
+
+
+
 
 
 
@@ -104,9 +113,6 @@ public class CarreraActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.overflow, menu);
