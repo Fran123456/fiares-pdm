@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         menuList = Help.getMenusHome();
        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
+        recyclerView = (RecyclerView)findViewById(R.id.recycleMain);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter= new RecyclerViewAdaptador(menuList);
         recyclerView.setAdapter(adapter);

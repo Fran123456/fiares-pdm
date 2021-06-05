@@ -26,6 +26,12 @@ public class Help {
         return item;
     }
 
+    public static String cutString(String cadena){
+
+        String sSubCadena = cadena.substring(17,cadena.length());
+        return sSubCadena;
+    }
+
     public static String url(){
         return "http://ccpcatalana.com/fiaresapi/public/";
     }

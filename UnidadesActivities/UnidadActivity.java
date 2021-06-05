@@ -39,9 +39,10 @@ public class UnidadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unidad);
-
+        menuList = new ArrayList<>();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String id = getIntent().getStringExtra("id");
+        String id = getIntent().getStringExtra("id"); //id de la materia
+
         setTitle("FIARES - UNIDADES ");
         getUnidades(id);
     }
@@ -58,10 +59,13 @@ public class UnidadActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleUnidadx);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewUnidad(list);
                         recyclerView.setAdapter(adapter);
+
+
+
 
                         adapter.setOnClickListener(new View.OnClickListener(){
                             @Override

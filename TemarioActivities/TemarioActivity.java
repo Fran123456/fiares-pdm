@@ -38,6 +38,8 @@ public class TemarioActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_temario);
 
+        menuList = new ArrayList<>();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String id = getIntent().getStringExtra("id");
         setTitle("FIARES - TEMARIOS");

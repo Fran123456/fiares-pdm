@@ -59,7 +59,12 @@ public class RecyclerViewContenido extends RecyclerView.Adapter<RecyclerViewCont
     public void onBindViewHolder(RecyclerViewContenido.ViewHolder holder, int position) {
         holder.titulo.setText( menuList.get(position).getTitulo() );
         holder.des.setText( menuList.get(position).getDescripcion() );
-        holder.image.setImageResource( R.drawable.topic);
+        if(menuList.get(position).getPdf() != null){
+            holder.image.setImageResource( R.drawable.pdf);
+        }else{
+            holder.image.setImageResource( R.drawable.youtube);
+        }
+
     }
 
     public void setOnClickListener(View.OnClickListener listener){

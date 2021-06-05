@@ -1,11 +1,14 @@
 package com.fiares.ContenidoActivities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,6 +16,9 @@ import com.fiares.Models.Contenido;
 import com.fiares.Models.ContenidoApi;
 import com.fiares.R;
 import com.fiares.Utility.Help;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +40,7 @@ public class ContenidoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contenido);
-
+       menuList = new ArrayList<>();
         setTitle("FIARES - CONTENIDO");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String id = getIntent().getStringExtra("id");
@@ -56,7 +62,7 @@ public class ContenidoActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenidox);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewContenido(list);
                         recyclerView.setAdapter(adapter);
@@ -68,9 +74,9 @@ public class ContenidoActivity extends AppCompatActivity {
 
                                 try{
                                     Class<?>
-                                            clase=Class.forName("com.fiares.ContenidoActivities.ContenidoActivity");
+                                            clase=Class.forName("com.fiares.ContenidoActivities.InfoActivity");
                                     Intent inte = new Intent(getApplicationContext(), clase);
-                                    inte.putExtra("id", String.valueOf( menuList.get(recyclerView.getChildAdapterPosition(v)).getId() ) );
+                                    inte.putExtra("id", String.valueOf( menuList.get(recyclerView.getChildAdapterPosition(v)).getId()    ) );
                                     //inte.putExtra("id",  "Hola" );
                                     startActivity(inte);
                                 }catch(ClassNotFoundException e){
@@ -92,6 +98,35 @@ public class ContenidoActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+
+
+    public void cerrarSesion(View view){
+        AuthUI.getInstance().signOut(this).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Toast.makeText(getApplicationContext(), "Hasta pronto", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.overflow, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+
+        int id = item.getItemId();
+        if(id==R.id.menu_salir_menu){
+            this.cerrarSesion(item.getActionView());
+            // startActivity(new Intent(this , MainActivity.class));
+            // finish();
+            // Toast.makeText(this, "xxx", Toast.LENGTH_LONG).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

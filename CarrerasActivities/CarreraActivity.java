@@ -40,7 +40,7 @@ public class CarreraActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         menuList = new ArrayList<>();
         getCarreras();
-        setTitle("FIARES - CARRERAS ");
+        setTitle("FIARES - CARRERAS");
     }
 
     private void getCarreras(){
@@ -55,7 +55,7 @@ public class CarreraActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleCarrerax);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewCarrera(list);
                         recyclerView.setAdapter(adapter);

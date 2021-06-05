@@ -39,8 +39,10 @@ public class MateriaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_materia);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        String id = getIntent().getStringExtra("id");
+        String id = getIntent().getStringExtra("id"); //id carrera
+
         setTitle("FIARES - MATERIAS ");
+        menuList = new ArrayList<>();
         getMaterias(id);
     }
 
@@ -58,7 +60,7 @@ public class MateriaActivity extends AppCompatActivity {
                     if(response.isSuccessful()){
                         list.addAll(response.body());
                         menuList = response.body();
-                        recyclerView = (RecyclerView)findViewById(R.id.recycleContenido);
+                        recyclerView = (RecyclerView)findViewById(R.id.recycleMateriax);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         adapter= new RecyclerViewMateria(list);
                         recyclerView.setAdapter(adapter);

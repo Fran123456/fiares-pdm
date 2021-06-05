@@ -55,7 +55,7 @@ public class RecyclerViewCarrera extends RecyclerView.Adapter<RecyclerViewCarrer
     public void onBindViewHolder(RecyclerViewCarrera.ViewHolder holder, int position) {
         holder.titulo.setText( menuList.get(position).getCarrera() );
         holder.des.setText( menuList.get(position).getDescripcion() );
-        holder.image.setImageResource( R.drawable.carreers);
+        holder.image.setImageResource( R.drawable.career2);
     }
 
     public void setOnClickListener(View.OnClickListener listener){
