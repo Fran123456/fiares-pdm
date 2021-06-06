@@ -30,8 +30,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ContenidoActivity extends AppCompatActivity {
-
-
     private RecyclerView recyclerView;
     private RecyclerViewContenido adapter;
     private List<Contenido> menuList;
@@ -40,7 +38,7 @@ public class ContenidoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contenido);
-       menuList = new ArrayList<>();
+        menuList = new ArrayList<>();
         setTitle("FIARES - CONTENIDO");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String id = getIntent().getStringExtra("id");

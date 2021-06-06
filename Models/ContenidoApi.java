@@ -13,6 +13,9 @@ public interface ContenidoApi {
     @GET("api/contenido/{id}/{key}")
     public Call<Contenido> contenidoIndividual(@Path("id")int id, @Path("key") String key);
 
+    @GET("api/contenidos/like/{string}/{key}")
+    public Call<List<Contenido>> contenidoLike(@Path("string")String string, @Path("key") String key);
+
     @GET("api/contenido/pdf/{id}/{key}")
     public Call<String> pdf(@Path("id")int id, @Path("key") String key);
 }

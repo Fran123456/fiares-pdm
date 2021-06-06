@@ -14,7 +14,9 @@ public class Help {
     public static List<Menu> getMenusHome(){
         List<Menu> item = new ArrayList<>();
         item.add(new Menu("CARRERAS","Carreras disponibles con recursos", R.drawable.carreers,"CarrerasActivities.CarreraActivity"));
+        item.add(new Menu("BUSCADOR","Busca la información de una manera más rapida", R.drawable.search,"SearchActivities.SearchContenidoActivity"));
         item.add(new Menu("SOBRE NOSOTROS","Información general de la aplicación", R.drawable.info,"CareerActivities.CareerMenuActivity"));
+
         return item;
     }
 
