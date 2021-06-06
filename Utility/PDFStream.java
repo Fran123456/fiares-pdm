@@ -30,6 +30,7 @@ public class PDFStream  extends AsyncTask<String, Void, InputStream> {
             if(urlConnection.getResponseCode()==200){
                 inputStream = new BufferedInputStream(urlConnection.getInputStream());
             }
+
         }catch (IOException e){
            return null;
         }

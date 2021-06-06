@@ -2,11 +2,22 @@ package com.fiares.ContenidoActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +29,7 @@ import android.widget.Toast;
 import com.fiares.Models.Contenido;
 import com.fiares.Models.ContenidoApi;
 import com.fiares.R;
+import com.fiares.Utility.DonwloadCompleteReceiver;
 import com.fiares.Utility.Help;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,6 +38,12 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +56,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class InfoActivity extends AppCompatActivity {
    TextView titulo, des;
    YouTubePlayerView player;
-   ImageButton btnpdf;
+   ImageButton btnpdf, btndonwload;
    ImageButton compartir;
-   ImageButton ws, fb, twitter;
+   ImageButton ws, fb, twitter, btnExtern;
+    private static final short REQUEST_CODE = 6545;
+    public String name, url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,17 +77,14 @@ public class InfoActivity extends AppCompatActivity {
         ws= findViewById(R.id.whatsappbtn);
         fb=findViewById(R.id.fbbtn);
         twitter = findViewById(R.id.twitterbtn);
+        btndonwload=findViewById(R.id.downloadbtn);
+        btnExtern = findViewById(R.id.btnExtern);
         contenido(id);
 
 
     }
 
-    public void compartir(String url){
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "El mejor blog de android http://javaheros.blogspot.pe/");
-        startActivity(Intent.createChooser(intent, "Share with"));
-    }
+
 
     private void contenido(String id){
         Retrofit retrofit = new Retrofit.Builder().baseUrl(Help.url()).addConverterFactory(GsonConverterFactory.create()).build();
@@ -87,7 +104,7 @@ public class InfoActivity extends AppCompatActivity {
                         contenidox.setUrl(response.body().getUrl());
                         contenidox.setVideo(response.body().getVideo());
                         contenidox.setVistas(response.body().getVistas());
-                        titulo.setText(  response.body().getTitulo()  );
+                        titulo.setText(  response.body().getTitulo()+".pdf"  );
                         des.setText(contenidox.getDescripcion());
 
                         if(contenidox.getDescripcion()==null ||contenidox.getDescripcion()=="") des.setVisibility(View.GONE);
@@ -110,8 +127,27 @@ public class InfoActivity extends AppCompatActivity {
 
                                 }
                             });
+
+                            btndonwload.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                   // DescargarPDF(response.body().getPdf());
+                                    name = response.body().getTitulo()+".pdf";
+                                    url = response.body().getPdf();
+                                    download();
+                                }
+                            });
+
+                            btnExtern.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    DescargarPDF(response.body().getPdf());
+                                }
+                            });
                         }else{
                             btnpdf.setVisibility(View.GONE);
+                            btndonwload.setVisibility(View.GONE);
+                            btnExtern.setVisibility(View.GONE);
                             player.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                                 @Override
                                 public void onReady(@NonNull YouTubePlayer youTubePlayer) {
@@ -171,6 +207,9 @@ public class InfoActivity extends AppCompatActivity {
                             }
                         });
 
+
+
+
                          // Toast.makeText(getApplicationContext(), contenidox.getTitulo() , Toast.LENGTH_LONG).show();
                     }
                 }catch(Exception ex){
@@ -185,6 +224,98 @@ public class InfoActivity extends AppCompatActivity {
         });
 
     }
+
+
+    public void DescargarPDF(String urlstring) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlstring)));
+
+    }
+
+
+    public void download() {
+        if (isDownloadManagerAvailable()) {
+            checkSelfPermission();
+        } else {
+            Toast.makeText(this, "Download manager is not available", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    private static boolean isDownloadManagerAvailable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private void checkSelfPermission() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_CODE);
+
+        } else {
+
+            executeDownload();
+
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted! Do the work
+                    executeDownload();
+                } else {
+                    // permission denied!
+                    Toast.makeText(this, "Please give permissions ", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
+
+    private void executeDownload() {
+
+        // registrer receiver in order to verify when download is complete
+        registerReceiver(new DonwloadCompleteReceiver(), new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+        request.setDescription("Downloading file " + name);
+        request.setTitle(name);
+        // in order for this if to run, you must use the android 3.2 to compile your app
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            request.allowScanningByMediaScanner();
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        }
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
+
+        // get download service and enqueue file
+        DownloadManager manager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        manager.enqueue(request);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
